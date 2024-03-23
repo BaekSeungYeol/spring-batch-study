@@ -1,5 +1,6 @@
 package me.study.springbatchtest.study.chunk
 
+import me.study.springbatchtest.domain.Customer
 import org.springframework.batch.core.Job
 import org.springframework.batch.core.Step
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
@@ -24,6 +25,7 @@ class ChunkOrientedTaskletConfiguration(
         return jobBuilderFactory.get("batchJob")
             .start(step1())
             .next(step2())
+            .next(step3())
             .build()
     }
 
@@ -45,6 +47,16 @@ class ChunkOrientedTaskletConfiguration(
                 println("step2 has executed")
                 RepeatStatus.FINISHED
             }
+            .build()
+    }
+
+    @Bean
+    fun step3(): Step {
+        return stepBuilderFactory.get("Step3")
+            .chunk<Customer, Customer>(3)
+            .reader(CustomItemReader(mutableListOf( Customer("name1"), Customer("name2"))))
+            .processor(CustomItemProcessor())
+            .writer(CustomItemWriter())
             .build()
     }
 }
