@@ -26,6 +26,7 @@ class ChunkOrientedTaskletConfiguration(
             .start(step1())
             .next(step2())
             .next(step3())
+            .next(step4())
             .build()
     }
 
@@ -59,4 +60,14 @@ class ChunkOrientedTaskletConfiguration(
             .writer(CustomItemWriter())
             .build()
     }
+
+    @Bean
+    fun step4(): Step {
+        return stepBuilderFactory.get("Step4")
+            .chunk<String, String>(1)
+            .reader(CustomItemStreamReader(listOf("1","2")))
+            .writer(CustomItemStreamWriter())
+            .build()
+    }
+
 }
