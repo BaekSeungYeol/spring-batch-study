@@ -9,6 +9,7 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.batch.item.ItemReader
 import org.springframework.batch.item.file.FlatFileItemReader
 import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder
+import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper
 import org.springframework.batch.item.file.mapping.DefaultLineMapper
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer
 import org.springframework.batch.repeat.RepeatStatus
@@ -66,7 +67,8 @@ class FlatFilesConfiguration(
         return FlatFileItemReaderBuilder<User>()
             .name("flatFile")
             .resource(ClassPathResource("/customer.csv"))
-            .fieldSetMapper(UserFieldSetMapper())
+            .fieldSetMapper(BeanWrapperFieldSetMapper())
+            .targetType(User::class.java)
             .linesToSkip(1)
             .delimited().delimiter(",")
             .names("name", "age", "year")
