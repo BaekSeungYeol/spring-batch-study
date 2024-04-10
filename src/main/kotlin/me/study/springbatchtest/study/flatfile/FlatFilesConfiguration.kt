@@ -8,6 +8,7 @@ import org.springframework.batch.core.configuration.annotation.JobScope
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory
 import org.springframework.batch.item.ItemReader
 import org.springframework.batch.item.file.FlatFileItemReader
+import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder
 import org.springframework.batch.item.file.mapping.DefaultLineMapper
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer
 import org.springframework.batch.repeat.RepeatStatus
@@ -52,16 +53,23 @@ class FlatFilesConfiguration(
 
     @Bean
     fun itemReader(): ItemReader<User> {
-        val itemReader = FlatFileItemReader<User>()
-        itemReader.setResource(ClassPathResource("/customer.csv"))
+//        val itemReader = FlatFileItemReader<User>()
+//        itemReader.setResource(ClassPathResource("/customer.csv"))
+//
+//        val lineMapper = DefaultLineMapper<User>()
+//        lineMapper.setLineTokenizer(DelimitedLineTokenizer())
+//        lineMapper.setFieldSetMapper(UserFieldSetMapper())
+//
+//        itemReader.setLineMapper(lineMapper)
+//        itemReader.setLinesToSkip(1)
 
-        val lineMapper = DefaultLineMapper<User>()
-        lineMapper.setLineTokenizer(DelimitedLineTokenizer())
-        lineMapper.setFieldSetMapper(UserFieldSetMapper())
-
-        itemReader.setLineMapper(lineMapper)
-        itemReader.setLinesToSkip(1)
-
-        return itemReader
+        return FlatFileItemReaderBuilder<User>()
+            .name("flatFile")
+            .resource(ClassPathResource("/customer.csv"))
+            .fieldSetMapper(UserFieldSetMapper())
+            .linesToSkip(1)
+            .delimited().delimiter(",")
+            .names("name", "age", "year")
+            .build()
     }
 }

@@ -7,9 +7,9 @@ class UserFieldSetMapper: FieldSetMapper<User> {
 
     override fun mapFieldSet(fieldSet: FieldSet): User {
         return User(
-            fieldSet.readString(0),
-            fieldSet.readInt(1),
-            fieldSet.readInt(2)
+            fieldSet.readString("name"),
+            fieldSet.readInt("age"),
+            fieldSet.readInt("year")
         )
     }
 }
