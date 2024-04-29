@@ -22,6 +22,7 @@ class JobRunner(
             .addLong("seq", 2L)
             .addDate("date", Date())
             .addDouble("age", 16.5)
+            .addString("requestDate", "20240417")
             .toJobParameters()
 
         jobLauncher.run(job, jobParameters)
